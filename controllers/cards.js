@@ -14,7 +14,7 @@ module.exports.createCard = (req, res) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400);
+        res.status(400).send({ message: err.message });
       } else {
         res.status(500).send({ message: 'Внутренняя ошибка сервера' });
       }
@@ -25,9 +25,10 @@ module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Ошибка id' });
+        res.status(404).send({ message: 'Карточка с данным ID не найдена' });
+      } else {
+        res.send({ data: card });
       }
-      res.send({ data: card });
     })
     .catch(() => res.status(500).send({ message: 'Внутренняя ошибка сервера' }));
 };
@@ -39,8 +40,9 @@ module.exports.likeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Ошибка id' });
+      } else {
+        res.send({ data: card });
       }
-      res.send({ data: card });
     })
     .catch(() => res.status(500).send({ message: 'Внутренняя ошибка сервера' }));
 };
@@ -52,8 +54,9 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Ошибка id' });
+      } else {
+        res.send({ data: card });
       }
-      res.send({ data: card });
     })
     .catch(() => res.status(500).send({ message: 'Внутренняя ошибка сервера' }));
 };
